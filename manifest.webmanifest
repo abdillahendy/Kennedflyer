@@ -1,8 +1,12 @@
 {
-  "name":"KENNED Flyer Generator",
-  "short_name":"KENNED",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#0f0f10",
-  "theme_color":"#1a365d"
+  "name": "KENNED Flyer Generator",
+  "short_name": "KENNED",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f0f10",
+  "theme_color": "#12233f",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
 }
