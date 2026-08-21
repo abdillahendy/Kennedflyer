@@ -102,6 +102,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,system-u
 
 /* ===== BAR & KONTROL ===== */
 .fmtbar{width:min(92vw,430px);display:flex;flex-direction:column;gap:8px}
+.fmtbtns{display:flex;gap:8px}
+.fmtbtn{flex:1;background:var(--btn);border:1px solid var(--btnb);color:var(--btnt);padding:10px;border-radius:8px;font-size:12px;letter-spacing:1px;cursor:pointer}
+.fmtbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
+.cbtn{padding:8px;font-size:10px;letter-spacing:.5px}
 .ctrlbar{width:min(92vw,430px);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .qb-row{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
 .qbtn{min-width:40px;height:36px;background:var(--btn);border:1px solid var(--btnb);color:var(--text);border-radius:9px;font-size:12px;cursor:pointer}
@@ -116,7 +120,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,system-u
 body:not(.light) #status{color:#7ed491}
 .hiddenfiles input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 
-/* ===== PANEL (rapi, lega) ===== */
+/* ===== PANEL ===== */
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:16px;width:100%;max-width:560px}
 .subbox{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:18px}
 .boxtitle{font-size:11px;color:var(--goldtext);letter-spacing:1.5px;font-weight:700;margin-bottom:16px}
@@ -125,8 +129,9 @@ body:not(.light) #status{color:#7ed491}
 .field input[type=file]{width:100%;font-size:12px;color:var(--muted)}
 .subbox .field{margin-bottom:16px}
 .subbox .field.last{margin-bottom:0}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:end}
 .row2 .field{margin-bottom:0}
+.row2 .field label{white-space:nowrap;font-size:10px}
 .checks{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:16px}
 .check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--check)}
 .check input{accent-color:#d4af37;width:18px;height:18px}
@@ -153,6 +158,21 @@ body:not(.light) #status{color:#7ed491}
 @media (max-width:899px){
   .rightcol{order:-1}
 }
+</style>
+<!-- STYLE CADANGAN: biar tombol & grid tetap rapi walau file/browser rewel -->
+<style>
+.fmtbar{display:flex;flex-direction:column;gap:8px;width:min(92vw,430px)}
+.fmtbtns{display:flex;gap:8px}
+.fmtbtn{flex:1;background:var(--btn);border:1px solid var(--btnb);color:var(--btnt);padding:10px;border-radius:8px;font-size:12px;letter-spacing:1px;cursor:pointer}
+.fmtbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
+.cbtn{padding:8px;font-size:10px;letter-spacing:.5px}
+.qb-row{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
+.qbtn{min-width:40px;height:36px;background:var(--btn);border:1px solid var(--btnb);color:var(--text);border-radius:9px;font-size:12px;cursor:pointer}
+.qbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:end}
+.row2 .field label{white-space:nowrap;font-size:10px}
+.checks{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:16px}
+.logorow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -194,8 +214,8 @@ body:not(.light) #status{color:#7ed491}
           </div>
 
           <div class="row2">
-            <div class="field"><label>LUAS TANAH (angka)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lt" placeholder="317"></div>
-            <div class="field"><label>LUAS BANGUNAN (angka)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lb" placeholder="300"></div>
+            <div class="field"><label>LUAS TANAH</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lt" placeholder="317"></div>
+            <div class="field"><label>LUAS BANGUNAN</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lb" placeholder="300"></div>
           </div>
 
           <div class="checks">
@@ -238,7 +258,7 @@ body:not(.light) #status{color:#7ed491}
         <button id="btn-save" onclick="saveFlyer()">SIMPAN FLYER</button>
 
         <div class="footinfo">
-          <div class="tips">App <b>v2.5</b> — kalau tampilan beda dari biasanya, clear cache / buka tab baru.</div>
+          <div class="tips">App <b>v2.6</b> — kalau tampilan beda dari biasanya, clear cache / buka tab baru.</div>
           <div class="tips">Di flyer: <b>＋ FOTO</b> = masukkan gambar • <b>⟳</b> = ganti • <b>✕</b> = hapus • <b>✂</b> = crop (rasio + tarik bingkai) • <b>⇄ PINDAH</b> = tukar posisi foto.</div>
           <div class="tips">Android: kalau picker membuka File Manager, pilih tab <b>"Gambar / Images"</b>. Buka lewat Chrome/Safari, bukan dari dalam WA/IG, bukan incognito.</div>
         </div>
@@ -336,9 +356,9 @@ if('serviceWorker' in navigator){
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
-const APPVER='v2.5';
+const APPVER='v2.6';
 
-/* ===== TEMA (icon pakai kode aman, tidak bisa rusak) ===== */
+/* ===== TEMA ===== */
 const THEMEKEY='kenned_theme';
 function applyTheme(t){
   document.body.classList.toggle('light',t==='light');
