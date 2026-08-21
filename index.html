@@ -85,7 +85,6 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,system-u
 .rg.cropmode .rg-up,.rg.cropmode .rg-left,.rg.cropmode .rg-swapbtn{display:none}
 .rg-frame{display:none;position:absolute;border:1.5px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.55);cursor:move;touch-action:none}
 .rg.cropmode .rg-frame{display:block}
-/* handle besar & di DALAM pojok biar gampang dipencet */
 .ce-handle{position:absolute;width:26px;height:26px;background:#d4af37;border-radius:5px;touch-action:none;z-index:3}
 .ce-handle.tl{left:0;top:0;cursor:nwse-resize}
 .ce-handle.tr{right:0;top:0;cursor:nesw-resize}
@@ -219,7 +218,7 @@ body:not(.light) #status{color:#7ed491}
           <div class="field">
             <label>NAMA BRAND (kiri bawah — kosongkan jika pakai logo saja)</label>
             <input type="text" id="in-emblem" placeholder="contoh: KENNEDPROPERTI">
-            <div class="tips">Tersimpan otomatis <b>di perangkat masing-masing pengguna</b>. Install ke home screen biar permanen.</div>
+            <div class="tips">Tersimpan otomatis & instan <b>di perangkat masing-masing</b>. Install ke home screen biar permanen.</div>
           </div>
           <div class="field">
             <label>LOGO (opsional — otomatis dicrop kotak)</label>
@@ -281,10 +280,10 @@ body:not(.light) #status{color:#7ed491}
         <div class="field"><label>GESER KIRI–KANAN: <span id="qposxval">50</span></label><input type="range" id="in-qposx" min="0" max="100" value="50"></div>
         <div class="field"><label>GESER ATAS–BAWAH: <span id="qposyval">50</span></label><input type="range" id="in-qposy" min="0" max="100" value="50"></div>
         <div class="field"><label>ZOOM: <span id="qzoomval">100</span>%</label><input type="range" id="in-qzoom" min="50" max="200" value="100"></div>
-        <div class="field"><label>ROTASI: <span id="qrotval">0</span>° (isi foto lurus; ukuran & crop tetap stabil)</label><input type="range" id="in-qrot" min="-45" max="45" step="0.5" value="0"></div>
+        <div class="field"><label>ROTASI: <span id="qrotval">0</span>° (isi foto lurus; potongan tetap stabil)</label><input type="range" id="in-qrot" min="-45" max="45" step="0.5" value="0"></div>
         <button type="button" id="qbReset" class="minibtn gold">RESET FOTO INI</button>
+        <div class="tips">App <b>v2.3</b> — kalau tulisan ini beda/hilang, berarti HP masih buka versi lama → clear cache / buka tab baru / tambah ulang ikon home screen.</div>
         <div class="tips">Di flyer: <b>＋ FOTO</b> = masukkan gambar • <b>⟳</b> = ganti • <b>✕</b> = hapus • <b>✂</b> = crop (rasio + tarik bingkai) • <b>⇄ PINDAH</b> = tukar posisi foto (story multi-foto).</div>
-        <div class="tips">Android: kalau picker membuka File Manager, pilih tab <b>"Gambar / Images"</b>. Buka lewat Chrome/Safari, bukan dari dalam WA/IG, bukan incognito.</div>
         <div id="status"></div>
       </div>
 
@@ -304,6 +303,7 @@ if('serviceWorker' in navigator){
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
+const APPVER='v2.3';
 
 /* ===== TEMA ===== */
 const THEMEKEY='kenned_theme';
@@ -329,7 +329,7 @@ $('themeBtn').addEventListener('click',()=>{
     w.innerHTML='⚠️ Kamu membuka lewat <b>aplikasi (WA/IG/dll)</b> — upload & simpan bisa bermasalah. Tap <b>⋮ / Share</b> → <b>"Open in Browser / Buka di Chrome/Safari"</b>, lalu install ke home screen biar jadi app.';
   }else if(!storage){
     w.style.display='block';
-    w.innerHTML='⚠️ Penyimpanan tidak aktif (private mode?). Matikan private / install app ke home screen agar logo & nama tersimpan permanen.';
+    w.innerHTML='⚠️ Penyimpanan diblokir browser ini (private mode?). Matikan private mode agar logo & nama bisa tersimpan.';
   }
 })();
 
@@ -347,7 +347,7 @@ function layoutRegions(){
 }
 function status(t){$('status').textContent=t;}
 
-/* ===== ROTASI STABIL: kanvas tetap sama ukuran, sudut kosong diisi blur ===== */
+/* ===== ROTASI STABIL ===== */
 function makeWork(img,max){
   const m=Math.max(img.width,img.height);
   if(m<=max)return img;
@@ -363,7 +363,6 @@ function rotateFixed(img,deg){
   const cv=document.createElement('canvas');
   cv.width=w;cv.height=h;
   const x=cv.getContext('2d');
-  /* isi latar blur biar sudut kosong tidak transparan */
   const t=document.createElement('canvas');t.width=24;t.height=30;
   t.getContext('2d').drawImage(img,0,0,24,30);
   x.imageSmoothingEnabled=true;
@@ -379,7 +378,6 @@ function buildProcessed(i,full){
   if(!p.rot){p.img=p.orig;return;}
   const src=full?p.orig:(p.work||p.orig);
   p.img=rotateFixed(src,p.rot);
-  /* rect crop TIDAK disentuh -> crop & zoom tetap stabil saat rotate */
 }
 let rotRaf=0;
 function scheduleRotBuild(i){
@@ -423,7 +421,7 @@ $('qbReset').addEventListener('click',()=>{
   const i=activeSlot;
   const p=photos[i];
   p.zoom=100;p.posX=50;p.posY=50;p.rot=0;
-  p.rect=null;p.ratio=0;               /* reset juga menghapus crop */
+  p.rect=null;p.ratio=0;
   buildProcessed(i,false);
   exitCrop(regions[i]);
   regions[i].markRatio();
@@ -456,11 +454,30 @@ $('in-caption').addEventListener('input',e=>{
   $('out-caption').textContent=v;
   $('out-caption').style.display=v.trim()?'':'none';
 });
+
+/* ===== MEMORI BRAND (SAVE INSTAN + FLUSH SAAT TAB DITUTUP) ===== */
+const MEMKEY='kenned_flyer_v1';
+let logoOrigData=null;
+function saveBrand(feedback){
+  try{
+    localStorage.setItem(MEMKEY,JSON.stringify({
+      brand:$('in-emblem').value,
+      logo:logoOrigData,
+      lz:lZoom,lx:lPosX,ly:lPosY
+    }));
+    if(feedback)status('Brand tersimpan ✓ ('+APPVER+')');
+  }catch(e){
+    status('GAGAL menyimpan: penyimpanan diblokir browser ini (private mode?).');
+  }
+}
 $('in-emblem').addEventListener('input',e=>{
   $('out-emblem').textContent=e.target.value;
   $('out-emblem').style.display=e.target.value.trim()?'':'none';
-  saveBrand();
+  saveBrand(true);
 });
+/* flush simpanan saat tab/app ditutup */
+window.addEventListener('pagehide',()=>saveBrand(false));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBrand(false);});
 
 /* ===== FONT ===== */
 const FONTS={
@@ -502,22 +519,6 @@ $('in-gradcolor').addEventListener('input',e=>{
   paintContentBg();renderPhoto();
 });
 $('in-grad-on').addEventListener('change',e=>{gradOn=e.target.checked;renderPhoto();});
-
-/* ===== MEMORI BRAND ===== */
-const MEMKEY='kenned_flyer_v1';
-let logoOrigData=null, saveT=0;
-function saveBrand(){
-  clearTimeout(saveT);
-  saveT=setTimeout(()=>{
-    try{
-      localStorage.setItem(MEMKEY,JSON.stringify({
-        brand:$('in-emblem').value,
-        logo:logoOrigData,
-        lz:lZoom,lx:lPosX,ly:lPosY
-      }));
-    }catch(e){}
-  },300);
-}
 
 /* ===== FORMAT & STORY ===== */
 function setFmt(f){
@@ -658,7 +659,6 @@ function initCropRect(img,ratio){
   else{w=img.width;h=w/ratio;}
   return{sx:(img.width-w)/2,sy:(img.height-h)/2,sw:w,sh:h};
 }
-/* rect awal crop dengan margin biar handle tidak mentepi tombol */
 function startRect(img,ratio){
   if(ratio>0){
     const r=initCropRect(img,ratio);
@@ -919,7 +919,7 @@ $('in-logo').addEventListener('change',async e=>{
     logoSrc=img;
     logoOrigData=downscale(img,600);
     $('logoCropBox').style.display='grid';
-    renderLogo();saveBrand();
+    renderLogo();saveBrand(true);
   }catch(err){status('Gagal memuat logo.');}
 });
 function downscale(img,max){
@@ -944,7 +944,7 @@ function renderLogo(){
   el.style.display='block';
   $('flyer').classList.add('has-logo');
 }
-function req2(){if(raf2)return;raf2=requestAnimationFrame(()=>{raf2=0;renderLogo();saveBrand();});}
+function req2(){if(raf2)return;raf2=requestAnimationFrame(()=>{raf2=0;renderLogo();saveBrand(false);});}
 $('in-lzoom').addEventListener('input',e=>{lZoom=+e.target.value;$('lzoomval').textContent=lZoom;req2();});
 $('in-lposx').addEventListener('input',e=>{lPosX=+e.target.value;$('lposxval').textContent=lPosX;req2();});
 $('in-lposy').addEventListener('input',e=>{lPosY=+e.target.value;$('lposyval').textContent=lPosY;req2();});
@@ -953,13 +953,14 @@ $('btn-del-logo').addEventListener('click',()=>{
   const el=$('logoImg');el.style.display='none';el.removeAttribute('src');
   $('logoCropBox').style.display='none';
   $('flyer').classList.remove('has-logo');
-  saveBrand();
+  saveBrand(true);
 });
 
 /* ===== MUAT MEMORI ===== */
 (function loadBrand(){
   try{
-    const raw=localStorage.getItem(MEMKEY); if(!raw)return;
+    const raw=localStorage.getItem(MEMKEY);
+    if(!raw){status('Siap • '+APPVER+' • brand belum tersimpan di perangkat ini.');return;}
     const d=JSON.parse(raw);
     if(d.brand){
       $('in-emblem').value=d.brand;
@@ -975,10 +976,13 @@ $('btn-del-logo').addEventListener('click',()=>{
       img.onload=()=>{logoSrc=img;$('logoCropBox').style.display='grid';renderLogo();};
       img.src=d.logo;
     }
-  }catch(e){}
+    status('Memori brand dimuat ✓ ('+APPVER+')');
+  }catch(e){
+    status('Siap • '+APPVER+' • (memori tidak bisa dibaca)');
+  }
 })();
 
-/* ===== SIMPAN ===== */
+/* ===== SIMPAN FLYER ===== */
 async function saveFlyer(){
   if(typeof html2canvas==='undefined'){alert('Butuh koneksi internet untuk memuat library.');return;}
   const btn=$('btn-save');btn.disabled=true;btn.textContent='MEMPROSES...';
