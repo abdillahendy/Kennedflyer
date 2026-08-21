@@ -102,41 +102,44 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,system-u
 
 /* ===== BAR & KONTROL ===== */
 .fmtbar{width:min(92vw,430px);display:flex;flex-direction:column;gap:8px}
-.ctrlbar{width:min(92vw,430px);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ctrlbar{width:min(92vw,430px);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .qb-row{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
 .qbtn{min-width:40px;height:36px;background:var(--btn);border:1px solid var(--btnb);color:var(--text);border-radius:9px;font-size:12px;cursor:pointer}
 .qbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
-.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:7px;letter-spacing:.4px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:.4px}
 .field input[type=range]{width:100%;accent-color:#d4af37}
 .minibtn{width:100%;background:var(--btn);border:1px solid var(--btnb);color:var(--goldtext);padding:12px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer}
 .minibtn.gold{background:#d4af37;color:#111;font-weight:700;border-color:#d4af37}
+.minibtn.small{width:auto;padding:9px 12px;font-size:10px;flex:0 0 auto;border-radius:8px}
 .tips{font-size:10px;color:var(--muted2);margin-top:2px;line-height:1.6}
 #status{font-size:11px;color:#2e9e5b;min-height:14px}
 body:not(.light) #status{color:#7ed491}
 .hiddenfiles input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 
-/* ===== PANEL ===== */
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:560px}
-.span2{grid-column:1/-1}
-.field input[type=text],.field input[type=number],.field textarea,.field select{width:100%;background:var(--input);border:1px solid var(--inputb);color:var(--text);border-radius:8px;padding:10px;font-size:13px;font-family:inherit}
+/* ===== PANEL (rapi, lega) ===== */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:16px;width:100%;max-width:560px}
+.subbox{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:18px}
+.boxtitle{font-size:11px;color:var(--goldtext);letter-spacing:1.5px;font-weight:700;margin-bottom:16px}
+.field input[type=text],.field input[type=number],.field textarea,.field select{width:100%;background:var(--input);border:1px solid var(--inputb);color:var(--text);border-radius:8px;padding:11px;font-size:13px;font-family:inherit}
 .field textarea{resize:vertical;min-height:52px}
 .field input[type=file]{width:100%;font-size:12px;color:var(--muted)}
-.check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--check);margin-top:10px}
+.subbox .field{margin-bottom:16px}
+.subbox .field.last{margin-bottom:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.row2 .field{margin-bottom:0}
+.checks{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:16px}
+.check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--check)}
 .check input{accent-color:#d4af37;width:18px;height:18px}
-.fmtbtns{display:flex;gap:8px}
-.fmtbtn{flex:1;background:var(--btn);border:1px solid var(--btnb);color:var(--btnt);padding:10px;border-radius:8px;font-size:12px;letter-spacing:1px;cursor:pointer}
-.fmtbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
-.cbtn{padding:8px;font-size:10px;letter-spacing:.5px}
-.subbox{grid-column:1/-1;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:16px}
-.boxtitle{font-size:11px;color:var(--goldtext);letter-spacing:1.5px;font-weight:700;margin-bottom:12px}
+.logorow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.logorow input[type=file]{flex:1;min-width:140px}
 .swatches{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .swatch{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
 .swatch.active{border-color:#d4af37}
 .swatch.custom{display:inline-block;width:26px;height:26px}
 .swatch.custom input[type=color]{width:26px;height:26px;border:none;padding:0;border-radius:50%;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer}
-#btn-save{grid-column:1/-1;background:#d4af37;color:#111;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer}
+#btn-save{background:#d4af37;color:#111;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer}
 #btn-save:disabled{opacity:.5}
-.footinfo{grid-column:1/-1;display:flex;flex-direction:column;gap:4px}
+.footinfo{display:flex;flex-direction:column;gap:4px}
 
 #resultWrap{display:none;text-align:center;padding-bottom:30px;width:100%}
 #resultWrap p{font-size:11px;color:var(--muted);max-width:430px;margin:10px auto}
@@ -158,7 +161,7 @@ body:not(.light) #status{color:#7ed491}
   <div class="banner">
     <div class="bname">KENNED</div>
     <div class="btag">PROPERTY FLYER GENERATOR</div>
-    <button type="button" class="themebtn" id="themeBtn">☀️</button>
+    <button type="button" class="themebtn" id="themeBtn">&#9728;&#65039;</button>
   </div>
 
   <div class="hiddenfiles">
@@ -174,30 +177,49 @@ body:not(.light) #status{color:#7ed491}
 
         <div class="subbox">
           <div class="boxtitle">TEKS & BRAND</div>
+
           <div class="field">
             <label>JUDUL / NAMA JALAN / AREA (enter = baris baru)</label>
             <textarea id="in-title" rows="2" placeholder="Isi judul / lokasi… contoh: Senopati Area&#10;Very Good Deal!"></textarea>
           </div>
-          <div class="cropgrid">
-            <div class="field"><label>HARGA</label><input type="text" id="in-harga" placeholder="contoh: 16 Milyar"></div>
-            <div class="field"><label>LUAS TANAH (angka saja)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lt" placeholder="contoh: 317"></div>
-            <div class="field"><label>LUAS BANGUNAN (angka saja)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lb" placeholder="contoh: 300"></div>
-            <div class="field"><label>CAPTION AREA (kanan bawah)</label><input type="text" id="in-caption" placeholder="contoh: Senopati Area"></div>
-          </div>
-          <label class="check"><input type="checkbox" id="in-title-on" checked> Tampilkan judul</label>
-          <label class="check"><input type="checkbox" id="in-specs-on" checked> Tampilkan harga & luas</label>
-          <label class="check"><input type="checkbox" id="in-cap-on" checked> Tampilkan caption area</label>
 
-          <div class="field" style="margin-top:14px">
+          <div class="field">
+            <label>HARGA</label>
+            <input type="text" id="in-harga" placeholder="contoh: 16 Milyar">
+          </div>
+
+          <div class="field">
+            <label>CAPTION AREA (kanan bawah)</label>
+            <input type="text" id="in-caption" placeholder="contoh: Senopati Area">
+          </div>
+
+          <div class="row2">
+            <div class="field"><label>LUAS TANAH (angka)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lt" placeholder="317"></div>
+            <div class="field"><label>LUAS BANGUNAN (angka)</label><input type="number" inputmode="decimal" min="0" step="any" id="in-lb" placeholder="300"></div>
+          </div>
+
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="in-title-on" checked> Judul</label>
+            <label class="check"><input type="checkbox" id="in-specs-on" checked> Harga & luas</label>
+            <label class="check"><input type="checkbox" id="in-cap-on" checked> Caption</label>
+          </div>
+
+          <div class="field">
             <label>NAMA BRAND (kiri bawah — kosongkan jika pakai logo saja)</label>
             <input type="text" id="in-emblem" placeholder="contoh: KENNEDPROPERTI">
           </div>
+
           <div class="field">
             <label>LOGO (opsional)</label>
-            <input type="file" id="in-logo" accept="image/*">
-            <button type="button" class="minibtn" id="btnCropLogo" style="display:none;margin-top:8px">CROP LOGO (1:1)</button>
+            <div class="logorow">
+              <input type="file" id="in-logo" accept="image/*">
+              <button type="button" class="minibtn small" id="btnCropLogo" style="display:none">CROP 1:1</button>
+            </div>
           </div>
-          <label class="check"><input type="checkbox" id="in-logo-on" checked> Tampilkan logo</label>
+
+          <div class="field last">
+            <label class="check" style="margin:0"><input type="checkbox" id="in-logo-on" checked> Tampilkan logo</label>
+          </div>
 
           <div id="logoCropBox" style="display:none">
             <div class="lc-stage" id="lcStage">
@@ -216,7 +238,7 @@ body:not(.light) #status{color:#7ed491}
         <button id="btn-save" onclick="saveFlyer()">SIMPAN FLYER</button>
 
         <div class="footinfo">
-          <div class="tips">App <b>v2.4</b> — kalau tampilan beda dari biasanya, clear cache / buka tab baru.</div>
+          <div class="tips">App <b>v2.5</b> — kalau tampilan beda dari biasanya, clear cache / buka tab baru.</div>
           <div class="tips">Di flyer: <b>＋ FOTO</b> = masukkan gambar • <b>⟳</b> = ganti • <b>✕</b> = hapus • <b>✂</b> = crop (rasio + tarik bingkai) • <b>⇄ PINDAH</b> = tukar posisi foto.</div>
           <div class="tips">Android: kalau picker membuka File Manager, pilih tab <b>"Gambar / Images"</b>. Buka lewat Chrome/Safari, bukan dari dalam WA/IG, bukan incognito.</div>
         </div>
@@ -314,13 +336,13 @@ if('serviceWorker' in navigator){
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
-const APPVER='v2.4';
+const APPVER='v2.5';
 
-/* ===== TEMA ===== */
+/* ===== TEMA (icon pakai kode aman, tidak bisa rusak) ===== */
 const THEMEKEY='kenned_theme';
 function applyTheme(t){
   document.body.classList.toggle('light',t==='light');
-  $('themeBtn').textContent=(t==='light')?'🌙':'️';
+  $('themeBtn').innerHTML=(t==='light')?'&#127769;':'&#9728;&#65039;';
 }
 $('themeBtn').addEventListener('click',()=>{
   const t=document.body.classList.contains('light')?'dark':'light';
@@ -471,7 +493,7 @@ function updateCaptionVis(){
   $('out-caption').style.display=(capOn&&$('in-caption').value.trim())?'':'none';
 }
 
-/* ===== MEMORI BRAND (+font, +toggle) ===== */
+/* ===== MEMORI BRAND ===== */
 const MEMKEY='kenned_flyer_v1';
 let logoOrigData=null,logoRect=null;
 function saveBrand(feedback){
@@ -482,8 +504,7 @@ function saveBrand(feedback){
       rect:logoRect,
       font:$('in-font').value,
       capOn:capOn,
-      logoOn:logoOn,
-      lz:100,lx:50,ly:50
+      logoOn:logoOn
     }));
     if(feedback)status('Brand tersimpan ✓ ('+APPVER+')');
   }catch(e){
@@ -498,7 +519,7 @@ $('in-emblem').addEventListener('input',e=>{
 window.addEventListener('pagehide',()=>saveBrand(false));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBrand(false);});
 
-/* ===== FONT (tersimpan) ===== */
+/* ===== FONT ===== */
 const FONTS={
   roboto:"'Roboto Condensed',sans-serif",
   oswald:"'Oswald',sans-serif",
@@ -757,7 +778,6 @@ $('lcFrame').addEventListener('pointermove',e=>{
     if(lcMode==='tr'){nw=lcStart.sw+dx;ny=lcStart.sy+dy;nh=lcStart.sh-dy;}
     if(lcMode==='tl'){nx=lcStart.sx+dx;nw=lcStart.sw-dx;ny=lcStart.sy+dy;nh=lcStart.sh-dy;}
     let w=Math.max(nw,nh);
-    rect={sx:nx,sy:ny,sw:w,sh:w};
     const right=nx+w,bottom=ny+w;
     w=clamp(w,logoSrc.width*0.08,Math.min(logoSrc.width,logoSrc.height));
     if(lcMode==='tl'||lcMode==='bl')nx=right-w;
@@ -1014,7 +1034,7 @@ $('in-logo').addEventListener('change',async e=>{
     logoSrc=img;
     logoOrigData=downscale(img,600);
     logoRect=initCropRect(img,1);
-    $('btnCropLogo').style.display='block';
+    $('btnCropLogo').style.display='inline-block';
     renderLogo();saveBrand(true);
   }catch(err){status('Gagal memuat logo.');}
 });
@@ -1041,7 +1061,6 @@ function renderLogo(){
   el.style.display='block';
   $('flyer').classList.add('has-logo');
 }
-$('btn-del-logo')&&null;
 
 /* ===== MUAT MEMORI ===== */
 (function loadBrand(){
@@ -1068,7 +1087,7 @@ $('btn-del-logo')&&null;
       img.onload=()=>{
         logoSrc=img;
         if(!logoRect)logoRect=initCropRect(img,1);
-        $('btnCropLogo').style.display='block';
+        $('btnCropLogo').style.display='inline-block';
         renderLogo();
       };
       img.src=d.logo;
