@@ -95,6 +95,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Roboto,system-u
 .rbtn{background:rgba(0,0,0,.6);color:#ccc;border:1px solid #3a3a40;border-radius:6px;padding:4px 7px;font-size:9px;letter-spacing:.5px;cursor:pointer}
 .rbtn.active{background:#d4af37;color:#111;border-color:#d4af37;font-weight:700}
 
+/* ===== CROP LOGO ===== */
+.lc-stage{position:relative;width:220px;height:220px;margin:10px auto 8px;background:#000;border-radius:8px;overflow:hidden;touch-action:none}
+.lc-stage img{position:absolute;max-width:none}
+.lc-frame{position:absolute;border:1.5px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.55);cursor:move;touch-action:none}
+
 /* ===== BAR & KONTROL ===== */
 .fmtbar{width:min(92vw,430px);display:flex;flex-direction:column;gap:8px}
 .ctrlbar{width:min(92vw,430px);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
@@ -131,8 +136,7 @@ body:not(.light) #status{color:#7ed491}
 .swatch.custom input[type=color]{width:26px;height:26px;border:none;padding:0;border-radius:50%;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer}
 #btn-save{grid-column:1/-1;background:#d4af37;color:#111;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer}
 #btn-save:disabled{opacity:.5}
-#btn-del-logo{width:100%;background:var(--btnb);color:var(--text);border:none;border-radius:8px;padding:9px;font-size:11px;cursor:pointer}
-.cropgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.footinfo{grid-column:1/-1;display:flex;flex-direction:column;gap:4px}
 
 #resultWrap{display:none;text-align:center;padding-bottom:30px;width:100%}
 #resultWrap p{font-size:11px;color:var(--muted);max-width:430px;margin:10px auto}
@@ -169,7 +173,7 @@ body:not(.light) #status{color:#7ed491}
       <div class="panel">
 
         <div class="subbox">
-          <div class="boxtitle">TEKS FLYER (kosong = tidak ditampilkan)</div>
+          <div class="boxtitle">TEKS & BRAND</div>
           <div class="field">
             <label>JUDUL / NAMA JALAN / AREA (enter = baris baru)</label>
             <textarea id="in-title" rows="2" placeholder="Isi judul / lokasi… contoh: Senopati Area&#10;Very Good Deal!"></textarea>
@@ -182,57 +186,40 @@ body:not(.light) #status{color:#7ed491}
           </div>
           <label class="check"><input type="checkbox" id="in-title-on" checked> Tampilkan judul</label>
           <label class="check"><input type="checkbox" id="in-specs-on" checked> Tampilkan harga & luas</label>
-        </div>
+          <label class="check"><input type="checkbox" id="in-cap-on" checked> Tampilkan caption area</label>
 
-        <div class="subbox">
-          <div class="boxtitle">GAYA FLYER</div>
-          <div class="field">
-            <label>FONT JUDUL & TEKS</label>
-            <select id="in-font">
-              <option value="roboto" selected>Roboto Condensed — Modern</option>
-              <option value="oswald">Oswald — Tegas</option>
-              <option value="bebas">Bebas Neue — Poster</option>
-              <option value="playfair">Playfair Display — Mewah</option>
-              <option value="lora">Lora — Serif Elegan</option>
-              <option value="montserrat">Montserrat — Bersih</option>
-              <option value="poppins">Poppins — Friendly</option>
-              <option value="raleway">Raleway — Mewah Tipis</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>WARNA GRADASI BAWAH</label>
-            <div class="swatches">
-              <button type="button" class="swatch active" data-c="#000000" style="background:#000000"></button>
-              <button type="button" class="swatch" data-c="#0a1a33" style="background:#0a1a33"></button>
-              <button type="button" class="swatch" data-c="#0a2318" style="background:#0a2318"></button>
-              <button type="button" class="swatch" data-c="#330a12" style="background:#330a12"></button>
-              <button type="button" class="swatch" data-c="#2b1a0a" style="background:#2b1a0a"></button>
-              <span class="swatch custom"><input type="color" id="in-gradcolor" value="#000000"></span>
-            </div>
-            <label class="check"><input type="checkbox" id="in-grad-on" checked> Tampilkan gradasi bawah</label>
-          </div>
-        </div>
-
-        <div class="subbox">
-          <div class="boxtitle">BRAND</div>
-          <div class="field">
+          <div class="field" style="margin-top:14px">
             <label>NAMA BRAND (kiri bawah — kosongkan jika pakai logo saja)</label>
             <input type="text" id="in-emblem" placeholder="contoh: KENNEDPROPERTI">
-            <div class="tips">Tersimpan otomatis & instan <b>di perangkat masing-masing</b>. Install ke home screen biar permanen.</div>
           </div>
           <div class="field">
-            <label>LOGO (opsional — otomatis dicrop kotak)</label>
+            <label>LOGO (opsional)</label>
             <input type="file" id="in-logo" accept="image/*">
+            <button type="button" class="minibtn" id="btnCropLogo" style="display:none;margin-top:8px">CROP LOGO (1:1)</button>
           </div>
-          <div class="cropgrid" id="logoCropBox" style="display:none">
-            <div class="field"><label>ZOOM LOGO: <span id="lzoomval">100</span>%</label><input type="range" id="in-lzoom" min="100" max="250" value="100"></div>
-            <div class="field"><label>GESER K–K: <span id="lposxval">50</span></label><input type="range" id="in-lposx" min="0" max="100" value="50"></div>
-            <div class="field"><label>GESER A–B: <span id="lposyval">50</span></label><input type="range" id="in-lposy" min="0" max="100" value="50"></div>
-            <div class="field"><button id="btn-del-logo" type="button">HAPUS LOGO</button></div>
+          <label class="check"><input type="checkbox" id="in-logo-on" checked> Tampilkan logo</label>
+
+          <div id="logoCropBox" style="display:none">
+            <div class="lc-stage" id="lcStage">
+              <img id="lcImg" alt="">
+              <div class="lc-frame" id="lcFrame">
+                <div class="ce-handle tl" data-h="tl"></div>
+                <div class="ce-handle tr" data-h="tr"></div>
+                <div class="ce-handle bl" data-h="bl"></div>
+                <div class="ce-handle br" data-h="br"></div>
+              </div>
+            </div>
+            <button type="button" class="minibtn gold" id="lcDone">✓ SELESAI CROP LOGO</button>
           </div>
         </div>
 
         <button id="btn-save" onclick="saveFlyer()">SIMPAN FLYER</button>
+
+        <div class="footinfo">
+          <div class="tips">App <b>v2.4</b> — kalau tampilan beda dari biasanya, clear cache / buka tab baru.</div>
+          <div class="tips">Di flyer: <b>＋ FOTO</b> = masukkan gambar • <b>⟳</b> = ganti • <b>✕</b> = hapus • <b>✂</b> = crop (rasio + tarik bingkai) • <b>⇄ PINDAH</b> = tukar posisi foto.</div>
+          <div class="tips">Android: kalau picker membuka File Manager, pilih tab <b>"Gambar / Images"</b>. Buka lewat Chrome/Safari, bukan dari dalam WA/IG, bukan incognito.</div>
+        </div>
       </div>
     </div>
 
@@ -282,8 +269,32 @@ body:not(.light) #status{color:#7ed491}
         <div class="field"><label>ZOOM: <span id="qzoomval">100</span>%</label><input type="range" id="in-qzoom" min="50" max="200" value="100"></div>
         <div class="field"><label>ROTASI: <span id="qrotval">0</span>° (isi foto lurus; potongan tetap stabil)</label><input type="range" id="in-qrot" min="-45" max="45" step="0.5" value="0"></div>
         <button type="button" id="qbReset" class="minibtn gold">RESET FOTO INI</button>
-        <div class="tips">App <b>v2.3</b> — kalau tulisan ini beda/hilang, berarti HP masih buka versi lama → clear cache / buka tab baru / tambah ulang ikon home screen.</div>
-        <div class="tips">Di flyer: <b>＋ FOTO</b> = masukkan gambar • <b>⟳</b> = ganti • <b>✕</b> = hapus • <b>✂</b> = crop (rasio + tarik bingkai) • <b>⇄ PINDAH</b> = tukar posisi foto (story multi-foto).</div>
+
+        <div class="field">
+          <label>FONT JUDUL & TEKS</label>
+          <select id="in-font">
+            <option value="roboto" selected>Roboto Condensed — Modern</option>
+            <option value="oswald">Oswald — Tegas</option>
+            <option value="bebas">Bebas Neue — Poster</option>
+            <option value="playfair">Playfair Display — Mewah</option>
+            <option value="lora">Lora — Serif Elegan</option>
+            <option value="montserrat">Montserrat — Bersih</option>
+            <option value="poppins">Poppins — Friendly</option>
+            <option value="raleway">Raleway — Mewah Tipis</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>WARNA GRADASI BAWAH</label>
+          <div class="swatches">
+            <button type="button" class="swatch active" data-c="#000000" style="background:#000000"></button>
+            <button type="button" class="swatch" data-c="#0a1a33" style="background:#0a1a33"></button>
+            <button type="button" class="swatch" data-c="#0a2318" style="background:#0a2318"></button>
+            <button type="button" class="swatch" data-c="#330a12" style="background:#330a12"></button>
+            <button type="button" class="swatch" data-c="#2b1a0a" style="background:#2b1a0a"></button>
+            <span class="swatch custom"><input type="color" id="in-gradcolor" value="#000000"></span>
+          </div>
+          <label class="check"><input type="checkbox" id="in-grad-on" checked> Tampilkan gradasi bawah</label>
+        </div>
         <div id="status"></div>
       </div>
 
@@ -303,13 +314,13 @@ if('serviceWorker' in navigator){
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
-const APPVER='v2.3';
+const APPVER='v2.4';
 
 /* ===== TEMA ===== */
 const THEMEKEY='kenned_theme';
 function applyTheme(t){
   document.body.classList.toggle('light',t==='light');
-  $('themeBtn').textContent=(t==='light')?'🌙':'☀️';
+  $('themeBtn').textContent=(t==='light')?'🌙':'️';
 }
 $('themeBtn').addEventListener('click',()=>{
   const t=document.body.classList.contains('light')?'dark':'light';
@@ -336,6 +347,7 @@ $('themeBtn').addEventListener('click',()=>{
 /* ===== state ===== */
 const photos=[0,1,2,3].map(()=>({orig:null,work:null,img:null,ratio:0,rect:null,posX:50,posY:50,zoom:100,rot:0}));
 let fmt='45',FW=1080,FH=1350,storyCount=1,dualOn=false,contentVisible=false,activeSlot=0,armedSwap=null;
+let capOn=true,logoOn=true;
 let curRegions=null;
 const RATIOS=[{r:0,l:'BEBAS'},{r:1,l:'1:1'},{r:1.3333,l:'4:3'},{r:1.5,l:'3:2'},{r:0.75,l:'3:4'},{r:1.7778,l:'16:9'},{r:0.5625,l:'9:16'}];
 
@@ -450,20 +462,28 @@ bindSpec('in-harga','out-harga','spec-harga','');
 bindSpec('in-lt','out-lt','spec-lt',' m²');
 bindSpec('in-lb','out-lb','spec-lb',' m²');
 $('in-caption').addEventListener('input',e=>{
-  const v=e.target.value;
-  $('out-caption').textContent=v;
-  $('out-caption').style.display=v.trim()?'':'none';
+  $('out-caption').textContent=e.target.value;
+  updateCaptionVis();
 });
+$('in-cap-on').addEventListener('change',e=>{capOn=e.target.checked;updateCaptionVis();saveBrand(false);});
+$('in-logo-on').addEventListener('change',e=>{logoOn=e.target.checked;renderLogo();saveBrand(false);});
+function updateCaptionVis(){
+  $('out-caption').style.display=(capOn&&$('in-caption').value.trim())?'':'none';
+}
 
-/* ===== MEMORI BRAND (SAVE INSTAN + FLUSH SAAT TAB DITUTUP) ===== */
+/* ===== MEMORI BRAND (+font, +toggle) ===== */
 const MEMKEY='kenned_flyer_v1';
-let logoOrigData=null;
+let logoOrigData=null,logoRect=null;
 function saveBrand(feedback){
   try{
     localStorage.setItem(MEMKEY,JSON.stringify({
       brand:$('in-emblem').value,
       logo:logoOrigData,
-      lz:lZoom,lx:lPosX,ly:lPosY
+      rect:logoRect,
+      font:$('in-font').value,
+      capOn:capOn,
+      logoOn:logoOn,
+      lz:100,lx:50,ly:50
     }));
     if(feedback)status('Brand tersimpan ✓ ('+APPVER+')');
   }catch(e){
@@ -475,11 +495,10 @@ $('in-emblem').addEventListener('input',e=>{
   $('out-emblem').style.display=e.target.value.trim()?'':'none';
   saveBrand(true);
 });
-/* flush simpanan saat tab/app ditutup */
 window.addEventListener('pagehide',()=>saveBrand(false));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBrand(false);});
 
-/* ===== FONT ===== */
+/* ===== FONT (tersimpan) ===== */
 const FONTS={
   roboto:"'Roboto Condensed',sans-serif",
   oswald:"'Oswald',sans-serif",
@@ -492,6 +511,7 @@ const FONTS={
 };
 $('in-font').addEventListener('change',e=>{
   $('flyer').style.setProperty('--ff',FONTS[e.target.value]);
+  saveBrand(false);
 });
 
 /* ===== GRADASI ===== */
@@ -679,6 +699,82 @@ function clampRectFor(p,r){
 function imgSrcUrl(p){
   return (p.img&&p.img.src)?p.img.src:(p.img?p.img.toDataURL('image/jpeg',0.85):'');
 }
+
+/* ===== CROP LOGO (1:1) ===== */
+let logoSrc=null,lcDisp=null,lcMode=null,lcX0=0,lcY0=0,lcStart=null;
+$('btnCropLogo').addEventListener('click',()=>{
+  if(!logoSrc)return;
+  $('logoCropBox').style.display='block';
+  $('lcImg').src=logoSrc.src;
+  layoutLogoCrop();
+});
+function layoutLogoCrop(){
+  const stage=$('lcStage');
+  const W=stage.clientWidth,H=stage.clientHeight;
+  if(!W||!H||!logoSrc)return;
+  const s=Math.min(W/logoSrc.width,H/logoSrc.height);
+  lcDisp={offX:(W-logoSrc.width*s)/2,offY:(H-logoSrc.height*s)/2,s};
+  const img=$('lcImg');
+  img.style.left=lcDisp.offX+'px';img.style.top=lcDisp.offY+'px';
+  img.style.width=(logoSrc.width*s)+'px';img.style.height=(logoSrc.height*s)+'px';
+  drawLogoFrame();
+}
+function drawLogoFrame(){
+  const f=$('lcFrame');
+  if(!logoRect||!lcDisp)return;
+  f.style.left=(lcDisp.offX+logoRect.sx*lcDisp.s)+'px';
+  f.style.top=(lcDisp.offY+logoRect.sy*lcDisp.s)+'px';
+  f.style.width=(logoRect.sw*lcDisp.s)+'px';
+  f.style.height=(logoRect.sh*lcDisp.s)+'px';
+}
+function clampLogoRect(r){
+  const im=logoSrc;
+  const maxS=Math.min(im.width,im.height);
+  r.sw=clamp(r.sw,maxS*0.08,maxS);
+  r.sh=r.sw;
+  r.sx=clamp(r.sx,0,im.width-r.sw);
+  r.sy=clamp(r.sy,0,im.height-r.sh);
+  return r;
+}
+$('lcFrame').addEventListener('pointerdown',e=>{
+  if(!logoSrc)return;
+  lcMode=e.target.dataset.h||'move';
+  lcX0=e.clientX;lcY0=e.clientY;lcStart={...logoRect};
+  $('lcFrame').setPointerCapture(e.pointerId);
+  e.stopPropagation();e.preventDefault();
+});
+$('lcFrame').addEventListener('pointermove',e=>{
+  if(!lcMode||!lcDisp)return;
+  const dx=(e.clientX-lcX0)/lcDisp.s,dy=(e.clientY-lcY0)/lcDisp.s;
+  let rect={...lcStart};
+  if(lcMode==='move'){
+    rect.sx=lcStart.sx+dx;rect.sy=lcStart.sy+dy;
+    rect=clampLogoRect(rect);
+  }else{
+    let nw=lcStart.sw,nh=lcStart.sh,nx=lcStart.sx,ny=lcStart.sy;
+    if(lcMode==='br'){nw=lcStart.sw+dx;nh=lcStart.sh+dy;}
+    if(lcMode==='bl'){nx=lcStart.sx+dx;nw=lcStart.sw-dx;nh=lcStart.sh+dy;}
+    if(lcMode==='tr'){nw=lcStart.sw+dx;ny=lcStart.sy+dy;nh=lcStart.sh-dy;}
+    if(lcMode==='tl'){nx=lcStart.sx+dx;nw=lcStart.sw-dx;ny=lcStart.sy+dy;nh=lcStart.sh-dy;}
+    let w=Math.max(nw,nh);
+    rect={sx:nx,sy:ny,sw:w,sh:w};
+    const right=nx+w,bottom=ny+w;
+    w=clamp(w,logoSrc.width*0.08,Math.min(logoSrc.width,logoSrc.height));
+    if(lcMode==='tl'||lcMode==='bl')nx=right-w;
+    if(lcMode==='tl'||lcMode==='tr')ny=bottom-w;
+    nx=clamp(nx,0,logoSrc.width-w);
+    ny=clamp(ny,0,logoSrc.height-w);
+    rect={sx:nx,sy:ny,sw:w,sh:w};
+  }
+  logoRect=rect;
+  drawLogoFrame();
+});
+['pointerup','pointercancel'].forEach(ev=>$('lcFrame').addEventListener(ev,()=>{lcMode=null;}));
+$('lcDone').addEventListener('click',()=>{
+  $('logoCropBox').style.display='none';
+  renderLogo();
+  saveBrand(false);
+});
 
 /* ===== REGION ===== */
 const regions=[];
@@ -911,14 +1007,14 @@ function req(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;renderPhoto(0.
 
 /* ===== LOGO ===== */
 const LS=400;
-let logoSrc=null,lZoom=100,lPosX=50,lPosY=50,raf2=0;
 $('in-logo').addEventListener('change',async e=>{
   const file=e.target.files[0]; if(!file)return;
   try{
     const img=await fileToImage(file);
     logoSrc=img;
     logoOrigData=downscale(img,600);
-    $('logoCropBox').style.display='grid';
+    logoRect=initCropRect(img,1);
+    $('btnCropLogo').style.display='block';
     renderLogo();saveBrand(true);
   }catch(err){status('Gagal memuat logo.');}
 });
@@ -931,30 +1027,21 @@ function downscale(img,max){
   return cv.toDataURL('image/png');
 }
 function renderLogo(){
-  if(!logoSrc)return;
+  const el=$('logoImg');
+  if(!logoSrc||!logoOn){
+    el.style.display='none';
+    $('flyer').classList.remove('has-logo');
+    return;
+  }
   const cv=document.createElement('canvas');cv.width=LS;cv.height=LS;
   const c=cv.getContext('2d');
-  const z=lZoom/100;
-  const s=Math.max(LS/logoSrc.width,LS/logoSrc.height)*z;
-  const dw=logoSrc.width*s,dh=logoSrc.height*s;
-  const dx=(LS-dw)*(lPosX/100),dy=(LS-dh)*(lPosY/100);
-  c.drawImage(logoSrc,dx,dy,dw,dh);
-  const el=$('logoImg');
+  const r=logoRect||initCropRect(logoSrc,1);
+  c.drawImage(logoSrc,r.sx,r.sy,r.sw,r.sh,0,0,LS,LS);
   el.src=cv.toDataURL('image/png');
   el.style.display='block';
   $('flyer').classList.add('has-logo');
 }
-function req2(){if(raf2)return;raf2=requestAnimationFrame(()=>{raf2=0;renderLogo();saveBrand(false);});}
-$('in-lzoom').addEventListener('input',e=>{lZoom=+e.target.value;$('lzoomval').textContent=lZoom;req2();});
-$('in-lposx').addEventListener('input',e=>{lPosX=+e.target.value;$('lposxval').textContent=lPosX;req2();});
-$('in-lposy').addEventListener('input',e=>{lPosY=+e.target.value;$('lposyval').textContent=lPosY;req2();});
-$('btn-del-logo').addEventListener('click',()=>{
-  logoSrc=null;logoOrigData=null;
-  const el=$('logoImg');el.style.display='none';el.removeAttribute('src');
-  $('logoCropBox').style.display='none';
-  $('flyer').classList.remove('has-logo');
-  saveBrand(true);
-});
+$('btn-del-logo')&&null;
 
 /* ===== MUAT MEMORI ===== */
 (function loadBrand(){
@@ -967,13 +1054,23 @@ $('btn-del-logo').addEventListener('click',()=>{
       $('out-emblem').textContent=d.brand;
       $('out-emblem').style.display='';
     }
-    if(d.lz){lZoom=d.lz;$('in-lzoom').value=lZoom;$('lzoomval').textContent=lZoom;}
-    if(d.lx){lPosX=d.lx;$('in-lposx').value=lPosX;$('lposxval').textContent=lPosX;}
-    if(d.ly){lPosY=d.ly;$('in-lposy').value=lPosY;$('lposyval').textContent=lPosY;}
+    if(d.font&&FONTS[d.font]){
+      $('in-font').value=d.font;
+      $('flyer').style.setProperty('--ff',FONTS[d.font]);
+    }
+    if(typeof d.capOn==='boolean'){capOn=d.capOn;$('in-cap-on').checked=capOn;}
+    if(typeof d.logoOn==='boolean'){logoOn=d.logoOn;$('in-logo-on').checked=logoOn;}
+    if(d.rect)logoRect=d.rect;
+    updateCaptionVis();
     if(d.logo){
       logoOrigData=d.logo;
       const img=new Image();
-      img.onload=()=>{logoSrc=img;$('logoCropBox').style.display='grid';renderLogo();};
+      img.onload=()=>{
+        logoSrc=img;
+        if(!logoRect)logoRect=initCropRect(img,1);
+        $('btnCropLogo').style.display='block';
+        renderLogo();
+      };
       img.src=d.logo;
     }
     status('Memori brand dimuat ✓ ('+APPVER+')');
